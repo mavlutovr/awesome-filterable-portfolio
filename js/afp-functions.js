@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
 		
 		// assign the class of the clicked filter option
 		// element to our $filterType variable
-		var $filterType = $(this).attr('class');
+		var $filterType = $(this).attr('data-value');
 		$(this).parent().addClass('afp-active-cat');
 		
 		if ($filterType == 'All') {
@@ -29,14 +29,21 @@ jQuery(document).ready(function($) {
 		else {
 			// find all li elements that have our required $filterType
 			// values for the data-type element
-			var $filteredData = $data.find('li[data-type=' + $filterType + ']');
+			var $filteredData = $data.find('li[data-type="' + $filterType + '"]');
 		}
 		
 		// call quicksand and assign transition parameters
-		$holder.quicksand($filteredData, {
-			duration: dur,
-			easing: afp_easing
-		});
+		$holder.quicksand($filteredData,
+			{
+				duration: window.afp_dur,
+				easing:   window.afp_easing
+			},
+			function () {
+				$(".colorbox").colorbox({
+					transition: 'elastic',
+					fadeOut:    250
+				});
+			});
 		return false;
 	});
 });
@@ -50,7 +57,7 @@ jQuery(document).ready(function($) {
 
 jQuery(document).ready(function($) {
 	$('.img-link-initial').adipoli({
-		'startEffect' : startFX,
-		'hoverEffect' : hoverFX
+		'startEffect' : window.afp_startFX,
+		'hoverEffect' : window.afp_hoverFX
 	});
 });
