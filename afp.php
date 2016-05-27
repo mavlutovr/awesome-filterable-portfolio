@@ -429,7 +429,7 @@ ORDER BY `item_sorting`');
 						<a href="' . admin_url() . 'admin.php?page=afp_add_new_portfolio_item&item_id=' . $item->item_id . '"><b>' . $item->item_title . '</b></a>
 						<div class="row-actions">
 							<span class="edit"><a href="' . admin_url() . 'admin.php?page=afp_add_new_portfolio_item&item_id=' . $item->item_id . '">Edit</a></span> |
-							<span class="submitdelete"><a href="' . admin_url() . 'admin.php?page=afp&action=confirm&item_id=' . $item->item_id . '">Delete</a></span>
+							<span class="submitdelete trash"><a href="' . admin_url() . 'admin.php?page=afp&action=confirm&item_id=' . $item->item_id . '">Delete</a></span>
 						</div>
 					</td>
 					<td>' . $item->item_client . '</td>
@@ -505,6 +505,13 @@ function afp_get_new_category_page(){
                 <br>
                 <textarea name="description" id="description" cols="50" rows="10"></textarea>
               </p>
+	            <p>
+		            <label for="cat_sorting"><b>
+				            <?php _e('Sorting :', 'awesome-filterable-portfolio'); ?>
+			            </b></label>
+		            <input name="cat_sorting" style="width: 50px;" id="cat_sorting"
+		                   value="<?php echo($cat->cat_sorting); ?>"/>
+	            </p>
               <input type="hidden" name="which" id="which" value="new_category"/>
               <input type="submit" value="<?php _e('Save New Category', 'awesome-filterable-portfolio'); ?>" class="button-primary">
             </form>
@@ -580,7 +587,7 @@ function afp_get_new_category_page(){
         </div>
       </div>
       <!-- #post-body-content --> 
-    </div>
+    </div>  
     <!-- #post-body --> 
     
   </div>
@@ -638,7 +645,7 @@ function afp_get_categories_page(){
 						<a href="' . admin_url() . 'admin.php?page=afp_add_new_category&cat_id=' . $cat->cat_id . '"><b>' . $cat->cat_name . '</b></a>
 						<div class="row-actions">
 							<span class="edit"><a href="' . admin_url() . 'admin.php?page=afp_add_new_category&cat_id=' . $cat->cat_id . '">Edit</a></span> |
-							<span class="submitdelete"><a href="' . admin_url() . 'admin.php?page=afp_categories&action=confirm&cat_id=' . $cat->cat_id . '">Delete</a></span>
+							<span class="submitdelete trash"><a href="' . admin_url() . 'admin.php?page=afp_categories&action=confirm&cat_id=' . $cat->cat_id . '">Delete</a></span>
 						</div>
 					</td>
 					<td>' . $cat->cat_description . '</td>
