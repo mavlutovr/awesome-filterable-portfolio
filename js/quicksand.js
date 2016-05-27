@@ -19,7 +19,7 @@ Github site: http://github.com/razorjack/quicksand
 (function($) {
   
   var cloneWithCanvases = function(jqueryObject) {
-      var clonedJqueryObject =  jqueryObject.clone();
+      var clonedJqueryObject =  jqueryObject.clone(true, true);
       var canvases = jqueryObject.find('canvas');
       if (canvases.length) {
           var clonedCanvases = clonedJqueryObject.find('canvas');

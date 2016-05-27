@@ -1326,6 +1326,37 @@ window.afp_hoverFX = '" . $afpOptions['hoverFX'] . "';
 }
 
 
+/**
+ * Render php template and return result as html code
+ * 
+ * @param string $templateFileName Full path of template file name
+ * @param array|null $templateData Template data
+ * @return string
+ * @throws Exception
+ */
+function afp_render($templateFileName, $templateData=null) {
+
+	ob_start();
+	
+	extract($templateData, EXTR_SKIP);
+
+	if ($templateFileName && is_file($templateFileName))
+	{
+		require($templateFileName);
+		$html = ob_get_contents();
+	}
+	else
+	{
+		throw new Exception('Not exists template file '.$templateFileName);
+	}
+
+	ob_clean();
+	ob_end_flush();
+
+	return $html;
+}
+
+
 function afp_shortcode(){
 	global $wpdb;
 	
@@ -1382,47 +1413,21 @@ function afp_shortcode(){
 	}
 	$cats = $wpdb->get_results(
 		'SELECT * FROM ' . $wpdb->prefix . 'afp_categories' . $orderby);
-	?>
-<?php 
-		//AFP Main Container
-		$output='<div class="afp-clear"></div>
-		<div id="afp-container">';
-		
-		//Start Echo Categories
-        $output.='<ul id="afp-filter">
-        <li class="afp-active-cat"><a href="#" class="All" data-value="All">' . __('All', 'awesome-filterable-portfolio') . '</a></li>'; 
-        foreach ( $cats as $cat ){
-            	$output.='<li><a href="#" class="' . preg_replace("~[^A-Za-z0-9]~", "", $cat->cat_name) . '" data-value="'.$cat->cat_id.'">' . $cat->cat_name . '</a></li>';
-        }
-        $output.='</ul>';
-		//End Echo Categories
-		
-		//Start Echo Portfolio Items
-        $output.='<ul class="afp-items">';
-        $k = 1;
-        foreach ($items as $item ){
-            	$output.='<li class="afp-single-item" data-id="id-' . $k . '" data-type="' . 
-		            $item->item_category_id . '">
-                <a class="colorbox" title="' . $item->item_description . '" href="' . $item->item_image . '"><img alt="" class="img-link-initial" src="' . $item->item_thumbnail . '"></a><br />
-                <ul class="afp-item-details">';
-                    if($item->item_title != null) { $output.='<li><strong>' . $item->item_title . '</strong></li>'; }
-					if($item->item_client != null) { $output.='<li>' . $item->item_client . '</li>'; }
-					if($item->item_date != '0000-00-00') { $output.='<li>' . date("m/d/Y", strtotime($item->item_date)) . '</li>'; }
-					if($item->item_link != null) { $output.='<li><a target="_' . $afpOptions['project_link'] . '" href="' . $item->item_link . '">' . __('Project Link', 'awesome-filterable-portfolio') . '</a></li>'; }
-	                if ($afpOptions['displayCat'] == 1) {
-		                $output .= '<li class="afp-item-category">'.
-			                getCategoryNameById($item->item_category_id).'</li>';
-	                }
-                $output.='</ul>
-            </li>';
-			
-            $k++;
-		}
-        $output.='</ul>
-			
-    </div>
-    
-    <div class="afp-clear"></div>';
+	
+	// Use template from theme dir
+	// Autocreate template in theme dir
+	$blankTemplateFile = __DIR__.'/templates/afp-container.php';
+	$themeTemplateFile = get_theme_root_uri().'/afp-container.php';
+	if (!is_file($themeTemplateFile))
+		//copy($blankTemplateFile, $themeTemplateFile);
+	if (!is_file($themeTemplateFile)) $themeTemplateFile = $blankTemplateFile;
+	
+	// Render the template
+	$output = afp_render($themeTemplateFile, array(
+		'cats'=>$cats,
+		'items'=>$items,
+	));
+	
 	add_action('wp_footer', 'afp_footer_js');
 	return $output;
 	
