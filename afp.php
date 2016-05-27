@@ -1424,9 +1424,9 @@ function afp_shortcode(){
 	// Use template from theme dir
 	// Autocreate template in theme dir
 	$blankTemplateFile = __DIR__.'/templates/afp-container.php';
-	$themeTemplateFile = get_theme_root_uri().'/afp-container.php';
+	$themeTemplateFile = get_template_directory().'/afp-container.php';
 	if (!is_file($themeTemplateFile))
-		//copy($blankTemplateFile, $themeTemplateFile);
+		copy($blankTemplateFile, $themeTemplateFile);
 	if (!is_file($themeTemplateFile)) $themeTemplateFile = $blankTemplateFile;
 	
 	// Render the template
