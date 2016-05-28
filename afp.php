@@ -1433,6 +1433,7 @@ function afp_shortcode(){
 	$output = afp_render($themeTemplateFile, array(
 		'cats'=>$cats,
 		'items'=>$items,
+		'afpOptions'=>$afpOptions,
 	));
 	
 	add_action('wp_footer', 'afp_footer_js');
